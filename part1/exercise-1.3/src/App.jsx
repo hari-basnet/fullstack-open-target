@@ -17,10 +17,10 @@ const App = () => {
     return <h1>{props.title}</h1>;
   };
 
-  const Part = ({ part, exercises }) => {
+  const Part = ({ part }) => {
     return (
       <p>
-        {part} {exercises}
+        {part.name} {part.exercises}
       </p>
     );
   };
@@ -29,7 +29,7 @@ const App = () => {
     return (
       <p>
         Number of exercises{" "}
-        {part1.exercises1 + part2.exercises2 + part3.exercises3}
+        {part1.exercises + part2.exercises + part3.exercises}
       </p>
     );
   };
@@ -42,12 +42,14 @@ const App = () => {
         alignItems: "center",
         width: "80%",
         margin: "0 auto",
+        wordWrap: "nowrap",
+        whiteSpace: "nowrap",
       }}
     >
       <Header title={course} />
-      <Part part={part1} exercises={part1.exercises1} />
-      <Part part={part2} exercises={part2.exercises2} />
-      <Part part={part3} exercises={part3.exercises3} />
+      <Part part={part1} />
+      <Part part={part2} />
+      <Part part={part3} />
       <Total />
     </div>
   );
