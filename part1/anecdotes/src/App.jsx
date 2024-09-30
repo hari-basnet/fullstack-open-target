@@ -12,13 +12,30 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
-  const [selected, setSelected] = useState(0);
+  const voteBank = Array.apply(null, new Array(8)).map(
+    Number.prototype.valueOf,
+    0
+  );
 
-  const handleClick = () => {
+  const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState([...voteBank]);
+
+  const handleVoteClick = () => {
+    const updatedVotes = [...votes];
+    updatedVotes[selected] += 1;
+    setVotes(updatedVotes);
+  };
+
+  const handleNextClick = () => {
     const randomNumber = Math.floor(Math.random() * anecdotes.length);
     console.log(randomNumber);
     setSelected(randomNumber);
   };
+
+  const maxVote = Math.max(...votes);
+
+  const winnerVote = votes.indexOf(maxVote);
+
   return (
     <div
       style={{
@@ -30,10 +47,16 @@ const App = () => {
         whiteSpace: "nowrap",
       }}
     >
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
       <div style={{ display: "flex", alignSelf: "flex-start" }}>
-        <button onClick={handleClick}>Next anecdote</button>
+        <button onClick={handleVoteClick}>Vote</button>
+        <button onClick={handleNextClick}>Next anecdote</button>
       </div>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[winnerVote]}</p>
+      <p>has {votes[winnerVote]} votes</p>
     </div>
   );
 };
