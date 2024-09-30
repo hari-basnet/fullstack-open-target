@@ -4,15 +4,27 @@ import Big from "big.js";
 const Statistics = (props) => {
   return props.totalFeedback > 0 ? (
     <>
-      <p>Good: {props.good}</p>
-      <p>Neutral: {props.neutral}</p>
-      <p>Bad: {props.bad}</p>
-      <p>All: {props.totalFeedback}</p>
-      <p>Average: {props.averageFeedback}</p>
-      <p>positive: {props.positiveFeedback} %</p>
+      <StatisticsLine text="Good" value={props.good} />
+      <StatisticsLine text="Bad" value={props.bad} />
+      <StatisticsLine text="Neutral" value={props.neutral} />
+      <StatisticsLine text="All" value={props.totalFeedback} />
+      <StatisticsLine text="Average" value={props.averageFeedback} />
+      <StatisticsLine text="Positive" value={props.positiveFeedback} />
     </>
   ) : (
     <p>No feedback given</p>
+  );
+};
+
+const Button = ({ text, handleClick }) => {
+  return <button onClick={handleClick}>{text}</button>;
+};
+
+const StatisticsLine = ({ text, value }) => {
+  return (
+    <p>
+      {text + ":"} {value}
+    </p>
   );
 };
 
@@ -57,9 +69,9 @@ const App = () => {
     >
       <div>
         <h1>Give feedback</h1>
-        <button onClick={handleGoodClick}>good</button>
-        <button onClick={handleNeutralClick}>neutral</button>
-        <button onClick={handleBadClick}>bad</button>
+        <Button text="Good" handleClick={handleGoodClick} />
+        <Button text="Neutral" handleClick={handleNeutralClick} />
+        <Button text="Bad" handleClick={handleBadClick} />
       </div>
       <div>
         <h1>Statistics</h1>
