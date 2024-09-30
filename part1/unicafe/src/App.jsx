@@ -4,12 +4,16 @@ import Big from "big.js";
 const Statistics = (props) => {
   return props.totalFeedback > 0 ? (
     <>
-      <StatisticsLine text="Good" value={props.good} />
-      <StatisticsLine text="Bad" value={props.bad} />
-      <StatisticsLine text="Neutral" value={props.neutral} />
-      <StatisticsLine text="All" value={props.totalFeedback} />
-      <StatisticsLine text="Average" value={props.averageFeedback} />
-      <StatisticsLine text="Positive" value={props.positiveFeedback} />
+      <table style={{ width: "100%" }}>
+        <tbody>
+          <StatisticsLine text="Good" value={props.good} />
+          <StatisticsLine text="Bad" value={props.bad} />
+          <StatisticsLine text="Neutral" value={props.neutral} />
+          <StatisticsLine text="All" value={props.totalFeedback} />
+          <StatisticsLine text="Average" value={props.averageFeedback} />
+          <StatisticsLine text="Positive" value={props.positiveFeedback} />
+        </tbody>
+      </table>
     </>
   ) : (
     <p>No feedback given</p>
@@ -22,9 +26,10 @@ const Button = ({ text, handleClick }) => {
 
 const StatisticsLine = ({ text, value }) => {
   return (
-    <p>
-      {text + ":"} {value}
-    </p>
+    <tr style={{ width: "70%" }}>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   );
 };
 
