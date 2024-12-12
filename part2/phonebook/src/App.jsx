@@ -3,12 +3,14 @@ import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import phoneService from "../src/services/phonebooks";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [searchString, setSearchString] = useState("");
+  const [notification, setNotification] = useState({ type: null, text: null });
 
   const doesNameExists = (name) => {
     const matchedPersons = persons.filter(
@@ -44,6 +46,9 @@ const App = () => {
       number: newPhoneNumber,
       id: persons.length + 1,
     };
+    const foundPerson = persons.find(
+      (person) => person.name === newName.trim()
+    );
 
     if (doesNameExists(newPerson.name)) {
       if (
@@ -51,19 +56,27 @@ const App = () => {
           `${newPerson.name} is already added to phonebook, replace the old number with a new one ?`
         )
       ) {
-        const foundPerson = persons.find(
-          (person) => person.name === newName.trim()
-        );
         foundPerson.number = newPhoneNumber;
-
-        phoneService.update(foundPerson.id, foundPerson).then((response) => {
-          setPersons((prevPerson) =>
-            prevPerson.map((person) =>
-              person.id !== response.id ? person : response
-            )
-          );
-          console.log(response);
-        });
+        phoneService
+          .update(foundPerson.id, foundPerson)
+          .then((response) => {
+            setPersons((prevPerson) =>
+              prevPerson.map((person) =>
+                person.id !== response.id ? person : response
+              )
+            );
+          })
+          .catch((error) => {
+            if (error) {
+              setNotification({
+                type: "error",
+                text: `Information of ${foundPerson.name} has already been removed from server`,
+              });
+            }
+            setTimeout(() => {
+              setNotification({ type: null, text: null });
+            }, 5000);
+          });
       }
       setNewName("");
       setNewPhoneNumber("");
@@ -71,6 +84,13 @@ const App = () => {
     }
     phoneService.create(newPerson).then((response) => {
       setPersons(persons.concat(response));
+      setNotification({
+        type: "success",
+        text: `Added ${response.name}`,
+      });
+      setTimeout(() => {
+        setNotification({ type: null, text: null });
+      }, 5000);
       setNewName("");
       setNewPhoneNumber("");
     });
@@ -82,6 +102,13 @@ const App = () => {
         setPersons((prevPerson) =>
           prevPerson.filter((person) => person.id != response.id)
         );
+        setNotification({
+          type: "success",
+          text: `Deleted ${response.name} successfully`,
+        });
+        setTimeout(() => {
+          setNotification({ type: null, text: null });
+        }, 5000);
       });
     }
   };
@@ -103,6 +130,7 @@ const App = () => {
         whiteSpace: "nowrap",
       }}
     >
+      <Notification className={notification.type} message={notification.text} />
       <h2>Phonebook</h2>
       <Filter
         searchString={searchString}
