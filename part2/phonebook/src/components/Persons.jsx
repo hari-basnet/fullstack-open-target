@@ -1,13 +1,26 @@
 import Person from "./Person";
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, handleDelete }) => {
   return persons.map((person) => {
     return (
-      <Person
-        key={person.name}
-        name={person.name}
-        phoneNumber={person.phoneNumber}
-      />
+      <div
+        key={person.name + "wrapper"}
+        style={{
+          display: "flex",
+        }}
+      >
+        <Person
+          key={person.name + "persoon"}
+          name={person.name}
+          number={person.number}
+        />
+        <button
+          key={person.name + "button"}
+          onClick={() => handleDelete(person.id, person.name)}
+        >
+          Delete
+        </button>
+      </div>
     );
   });
 };

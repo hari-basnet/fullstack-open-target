@@ -3,7 +3,7 @@ const PersonForm = ({
   newPhoneNumber,
   handleNameChange,
   handlePhoneNumberChange,
-  handleClick,
+  handleAdd,
 }) => {
   return (
     <form>
@@ -13,7 +13,7 @@ const PersonForm = ({
         <input value={newPhoneNumber} onChange={handlePhoneNumberChange} />
       </div>
       <div>
-        <button type="submit" onClick={handleClick}>
+        <button type="submit" onClick={handleAdd}>
           add
         </button>
       </div>
