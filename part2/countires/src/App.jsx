@@ -1,72 +1,48 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import countryServices from "./services/countryServices";
-import Country from "./components/country";
+import { useState, useEffect } from "react";
 
-function App() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const [countries, setCountries] = useState([]);
-  const [result, setResult] = useState([]);
+import getAllCountries from "./services/countryServices";
+import CountryFilter from "./components/CountryFilter";
+import Content from "./components/Content";
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
+const App = () => {
+  const [filter, setFilter] = useState("");
+  const [allCountries, setAllCountries] = useState([]);
+  const [filteredCountries, setFilteredCountries] = useState([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 5000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [searchTerm]);
-
-  useEffect(() => {
-    if (debouncedSearchTerm) {
-      const filteredCountries = countries.filter((country) => {
-        return country.name.common
-          .toLowerCase()
-          .startsWith(searchTerm.toLowerCase());
-      });
-
-      if (filteredCountries.length) {
-        setResult(filteredCountries);
-      }
-
-      if (filteredCountries.length === 1) {
-        countryServices.getCountryByName(searchTerm).then((response) => {
-          setResult([response]);
-        });
-      }
-    } else {
-      console.log("running else");
-      setResult([]);
-    }
-  }, [debouncedSearchTerm, countries]);
-
-  useEffect(() => {
-    countryServices.getAll(searchTerm).then((response) => {
-      setCountries(response);
+    getAllCountries().then((allCountries) => {
+      setAllCountries(allCountries);
     });
   }, []);
 
+  const handleFilterChange = (event) => {
+    const newFilter = event.target.value;
+    const countries =
+      newFilter.trim().length === 0
+        ? allCountries
+        : allCountries.filter((country) =>
+            country.name.common
+              .toLowerCase()
+              .includes(newFilter.trim().toLowerCase())
+          );
+    setFilter(newFilter);
+    setFilteredCountries(countries);
+  };
+
+  const selectCountry = (country) => {
+    setFilteredCountries([country]);
+  };
+
   return (
-    <div className="Main-application">
-      <p>Find countries</p>
-      <input value={searchTerm} onChange={handleSearchChange} />
-      {result.length === 1 ? <Country country={result[0]} /> : null}
-      {result.length > 10 ? (
-        <p>Too many matches, specify another filter!!!</p>
-      ) : (
-        result.map((country) => {
-          console.log(country);
-          return <p key={country.name.common}>{country.name.common}</p>;
-        })
-      )}
+    <div>
+      <CountryFilter filter={filter} handleFilterChange={handleFilterChange} />
+      <Content
+        countries={filteredCountries}
+        filter={filter}
+        selectCountry={selectCountry}
+      />
     </div>
   );
-}
+};
 
 export default App;
