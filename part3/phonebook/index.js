@@ -3,12 +3,12 @@ const app = express();
 
 const persons = [
   {
-    id: 1,
+    id: "1",
     name: "Hari Basnet",
     number: "0407407800",
   },
   {
-    id: 1,
+    id: "2",
     name: "Muna Thapa Basnet",
     number: "0407407801",
   },
@@ -20,6 +20,16 @@ app.get("/", (request, response) => {
 
 app.get("/api/persons", (request, response) => {
   response.json(persons);
+});
+
+app.get("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+  const result = persons.find((person) => person.id === id);
+
+  if (!result) {
+    response.status(404).send("Not found");
+  }
+  response.json(result);
 });
 
 app.get("/info", (request, response) => {
