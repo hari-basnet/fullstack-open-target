@@ -32,6 +32,12 @@ app.get("/api/persons/:id", (request, response) => {
   response.json(result);
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+  const result = persons.filter((person) => person.id !== id);
+  response.send(`Person with id ${result.id} has been successfully deleted!`);
+});
+
 app.get("/info", (request, response) => {
   const currentDate = new Date();
   response.send(
