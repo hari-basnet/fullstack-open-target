@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
 
 const persons = [
   {
@@ -30,6 +31,18 @@ app.get("/api/persons/:id", (request, response) => {
     response.status(404).send("Not found");
   }
   response.json(result);
+});
+
+app.post("/api/persons", (request, response) => {
+  const randomNumber = () => {
+    const min = persons.length + 1;
+    return Math.floor(Math.random() * 1000) + min;
+  };
+  const data = { ...request.body };
+  data.id = randomNumber().toString();
+  const updatedPersons = persons.concat(data);
+  //   response.status(201).send("Contact person created successfully!");
+  response.send(updatedPersons);
 });
 
 app.delete("/api/persons/:id", (request, response) => {
