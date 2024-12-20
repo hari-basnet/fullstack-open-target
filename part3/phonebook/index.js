@@ -38,11 +38,23 @@ app.post("/api/persons", (request, response) => {
     const min = persons.length + 1;
     return Math.floor(Math.random() * 1000) + min;
   };
-  const data = { ...request.body };
-  data.id = randomNumber().toString();
-  const updatedPersons = persons.concat(data);
+  const { name, number } = request.body;
+
+  if (!name || (!number && name === "") || number === "") {
+    return response.status(404).send({ error: "Name or number missing!" });
+  }
+
+  const nameExists = persons.find((person) => person.name === name);
+
+  if (nameExists) {
+    return response.status(403).send({ error: "name must be unique" });
+  }
+  const newContact = { name, number };
+
+  newContact.id = randomNumber().toString();
+  const updatedPersons = persons.concat(newContact);
   //   response.status(201).send("Contact person created successfully!");
-  response.send(updatedPersons);
+  return response.status(201).send(updatedPersons);
 });
 
 app.delete("/api/persons/:id", (request, response) => {
