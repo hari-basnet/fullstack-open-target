@@ -114,6 +114,7 @@ const App = () => {
 
   useEffect(() => {
     phoneService.getAll().then((response) => {
+      console.log(response);
       setPersons(response);
     });
   }, []);

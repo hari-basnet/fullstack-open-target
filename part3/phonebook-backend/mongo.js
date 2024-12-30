@@ -12,6 +12,14 @@ const number = process.argv[4];
 const url = `mongodb+srv://haribasnet:${password}@cluster0.fedjx.mongodb.net/phonebookApp?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose.set("strictQuery", false);
+noteSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
+
 mongoose.connect(url);
 
 const personSchema = new mongoose.Schema({
