@@ -27,16 +27,13 @@ const App = () => {
     setNewPhoneNumber(event.target.value);
   };
 
+  const filteredPersons = [...persons].filter((person) =>
+    person.name.toLowerCase().includes(searchString.toLowerCase())
+  );
+
   const handleSearchChange = (event) => {
     const string = event.target.value;
     setSearchString(string);
-    const filteredPersons = persons.filter((person) =>
-      person.name.toLowerCase().includes(string.toLowerCase())
-    );
-
-    if (filteredPersons.length > 0) {
-      setPersons(filteredPersons);
-    }
   };
 
   const handleAdd = (event) => {
@@ -69,7 +66,9 @@ const App = () => {
             if (error) {
               setNotification({
                 type: "error",
-                text: `Information of ${foundPerson.name} has already been removed from server`,
+                text:
+                  error.response.data.error ??
+                  error.response.data.error.message,
               });
             }
             setTimeout(() => {
@@ -81,18 +80,31 @@ const App = () => {
       setNewPhoneNumber("");
       return;
     }
-    phoneService.create(newPerson).then((response) => {
-      setPersons(persons.concat(response));
-      setNotification({
-        type: "success",
-        text: `Added ${response.name}`,
+    phoneService
+      .create(newPerson)
+      .then((response) => {
+        setPersons(persons.concat(response));
+        setNotification({
+          type: "success",
+          text: `Added ${response.name}`,
+        });
+        setTimeout(() => {
+          setNotification({ type: null, text: null });
+        }, 5000);
+        setNewName("");
+        setNewPhoneNumber("");
+      })
+      .catch((error) => {
+        if (error) {
+          setNotification({
+            type: "error",
+            text: error.response.data.error,
+          });
+        }
+        setTimeout(() => {
+          setNotification({ type: null, text: null });
+        }, 5000);
       });
-      setTimeout(() => {
-        setNotification({ type: null, text: null });
-      }, 5000);
-      setNewName("");
-      setNewPhoneNumber("");
-    });
   };
 
   const handleDelete = (id, name) => {
@@ -125,8 +137,6 @@ const App = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
-        width: "80%",
-        margin: "0 auto",
         whiteSpace: "nowrap",
       }}
     >
@@ -145,8 +155,8 @@ const App = () => {
         handlePhoneNumberChange={handlePhoneNumberChange}
       />
       <h2>Numbers</h2>
-      {persons.length > 0 && (
-        <Persons persons={persons} handleDelete={handleDelete} />
+      {filteredPersons.length > 0 && (
+        <Persons persons={filteredPersons} handleDelete={handleDelete} />
       )}
     </div>
   );

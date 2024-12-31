@@ -6,10 +6,18 @@ const PersonForm = ({
   handleAdd,
 }) => {
   return (
-    <form>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+    <form
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+      }}
+    >
+      <div>
         name: <input value={newName} onChange={handleNameChange} />
-        phone number:{" "}
+      </div>
+      <div>
+        phone number:
         <input value={newPhoneNumber} onChange={handlePhoneNumberChange} />
       </div>
       <div>
