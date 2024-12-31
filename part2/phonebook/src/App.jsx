@@ -98,12 +98,13 @@ const App = () => {
   const handleDelete = (id, name) => {
     if (window.confirm(`Delete ${name} ?`)) {
       phoneService.deletePerson(id).then((response) => {
+        console.log(response);
         setPersons((prevPerson) =>
           prevPerson.filter((person) => person.id != response.id)
         );
         setNotification({
           type: "success",
-          text: `Deleted ${response.name} successfully`,
+          text: `Deleted successfully`,
         });
         setTimeout(() => {
           setNotification({ type: null, text: null });
