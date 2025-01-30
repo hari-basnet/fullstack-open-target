@@ -12,6 +12,7 @@
   "author": "Hari Basnet",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
@@ -24,8 +25,11 @@
     "@eslint/js": "^9.17.0",
     "@stylistic/eslint-plugin-js": "^2.12.1",
     "eslint": "^9.17.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
     "globals": "^15.14.0",
     "nodemon": "^3.1.9",
+    "prettier": "^3.4.2",
     "supertest": "^7.0.0"
   }
 }

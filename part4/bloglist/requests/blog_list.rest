@@ -16,10 +16,12 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3003/api/blogs/67729a713ddf17c0755a9458 HTTP/1.1
+PUT http://localhost:3003/api/blogs/6777e4a258340136ee568e47 HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Hari",
-    "number": "040-22233345"
-}  
+    "title": "Changed title",
+    "author": "changed author",
+    "url": "www.jpt.com",
+    "likes": 23
+}
