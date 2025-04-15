@@ -34,6 +34,17 @@ export default [
         { allowConstantExport: true },
       ],
       "react/prop-types": 0,
+     'no-undef': 'error',
+      'no-unused-vars': [
+        'error',
+        {
+          vars: 'all', // Check all variables
+          args: 'after-used', // Check arguments after the last used argument
+          ignoreRestSiblings: true, // Ignore rest siblings in destructuring
+          argsIgnorePattern: '^_', // Ignore variables starting with _
+          varsIgnorePattern: '^_', // Ignore variables starting with _
+        },
+      ],
     },
   },
 ];

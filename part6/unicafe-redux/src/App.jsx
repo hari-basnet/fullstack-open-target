@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Big from "big.js";
 
 const Statistics = (props) => {
@@ -8,7 +7,7 @@ const Statistics = (props) => {
         <tbody>
           <StatisticsLine text="Good" value={props.good} />
           <StatisticsLine text="Bad" value={props.bad} />
-          <StatisticsLine text="Neutral" value={props.neutral} />
+          <StatisticsLine text="Neutral" value={props.ok} />
           <StatisticsLine text="All" value={props.totalFeedback} />
           <StatisticsLine text="Average" value={props.averageFeedback} />
           <StatisticsLine text="Positive" value={props.positiveFeedback} />
@@ -33,29 +32,37 @@ const StatisticsLine = ({ text, value }) => {
   );
 };
 
-const App = () => {
+const App = ({store}) => {
   // save clicks of each button to its own state
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
-  const [average, setAverage] = useState(0);
+  // const [good, setGood] = useState(0);
+  // const [neutral, setNeutral] = useState(0);
+  // const [bad, setBad] = useState(0);
+  // const [average, setAverage] = useState(0);
+
+  const { good, ok, bad, average } = store.getState();
 
   const handleGoodClick = () => {
-    setGood(good + 1);
-    setAverage(average + 1);
+    store.dispatch({ type: "GOOD" });
+    store.dispatch({ type: "INCREASEAVERAGE" });
+    // setGood(good + 1);
+    // setAverage(average + 1);
   };
 
   const handleNeutralClick = () => {
-    setNeutral(neutral + 1);
-    setAverage(average + 0);
+    store.dispatch({ type: "OK" });
+    store.dispatch({ type: "AVERAGEZERO" });
+    // setNeutral(neutral + 1);
+    // setAverage(average + 0);
   };
 
   const handleBadClick = () => {
-    setBad(bad + 1);
-    setAverage(average - 1);
+    store.dispatch({ type: "BAD" });
+    store.dispatch({ type: "DECREASEAVERAGE" });
+    // setBad(bad + 1);
+    // setAverage(average - 1);
   };
 
-  const totalFeedback = Big(good).plus(neutral).plus(bad).toNumber();
+  const totalFeedback = Big(good).plus(ok).plus(bad).toNumber();
   const averageFeedback =
     totalFeedback > 0 ? Big(average).div(totalFeedback).toNumber() : 0;
   const positiveFeedback =
@@ -82,7 +89,7 @@ const App = () => {
         <h1>Statistics</h1>
         <Statistics
           good={good}
-          neutral={neutral}
+          ok={ok}
           bad={bad}
           totalFeedback={totalFeedback}
           averageFeedback={averageFeedback}
